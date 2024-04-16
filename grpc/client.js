@@ -1,4 +1,4 @@
-var PROTO_PATH = __dirname + './protos/news.proto';
+var PROTO_PATH = __dirname + '/protos/news.proto';
 
 var parseArgs = require('minimist');
 var grpc = require('@grpc/grpc-js');
@@ -23,15 +23,17 @@ function main() {
   } else {
     target = 'localhost:50051';
   }
-  var client = new news_proto.Greeter(target,
+  var client = new news_proto.News(target,
                                        grpc.credentials.createInsecure());
-  var user;
+  var title;
   if (argv._.length > 0) {
-    user = argv._[0];
+    title = argv._[0];
   } else {
-    user = 'news';
+    title = 'Bad News';
   }
-  client.sayNews({name: user}, function(err, response) {
-    console.log('News:', response.message);
+  client.sayNews({title: title}, function(err, response) {
+    console.log('News:', response.content + ', Priority: ' + response.priority);
   });
 }
+
+module.exports = main;

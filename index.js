@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require('cors')
 const fetch = require('node-fetch');
+const grpcClient = require('./grpc/client');
 
 require("@opentelemetry/api");
 
@@ -17,6 +18,20 @@ app.all("/process", async (req, res) => {
     const response = await fetch(process.env.TARGET_URL + "/command" || "http://localhost:3002/command");
     const data = await response.json();
     console.log(data);
+  } catch (error) {
+      console.error('Error:', error);
+  }
+});
+
+app.all("/grpc", async (req, res) => {
+  try {
+    const grpcResp = await grpcClient();
+
+    console.log(grpcResp);
+    res.json({
+      success: true,
+      data: grpcResp
+    })
   } catch (error) {
       console.error('Error:', error);
   }
