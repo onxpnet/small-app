@@ -1,0 +1,28 @@
+{
+  "name": "be",
+  "version": "1.0.0",
+  "description": "Small App",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development nodemon ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "onxp",
+  "license": "Proprietary",
+  "dependencies": {
+    "@opentelemetry/api": "1.7.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.41.0",
+    "@opentelemetry/exporter-trace-otlp-http": "0.48.0",
+    "@opentelemetry/instrumentation": "^0.48.0",
+    "@opentelemetry/resources": "^1.21.0",
+    "@opentelemetry/sdk-node": "0.48.0",
+    "@opentelemetry/sdk-trace-node": "1.21.0",
+    "@opentelemetry/semantic-conventions": "^1.21.0",
+    "@opentelemetry/tracing": "^0.24.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
