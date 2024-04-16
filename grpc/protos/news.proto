@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.new";
+option java_outer_classname = "NewsProto";
+option objc_class_prefix = "NW";
+
+package news;
+
+service News {
+  rpc SayNews (NewsRequest) returns (NewsReply) {}
+
+  rpc SayNewsStreamReply (NewsRequest) returns (stream NewsReply) {}
+}
+
+message NewsRequest {
+  string title = 1;
+}
+
+message NewsReply {
+  string content = 1;
+  int32 priority = 2
+}
