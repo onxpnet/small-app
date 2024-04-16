@@ -13,6 +13,9 @@
   "author": "onxp",
   "license": "Proprietary",
   "dependencies": {
+    "@grpc/grpc-js": "^1.8.0",
+    "@grpc/grpc-js-xds": "^1.8.0",
+    "@grpc/proto-loader": "^0.6.0",
     "@opentelemetry/api": "1.7.0",
     "@opentelemetry/auto-instrumentations-node": "^0.41.0",
     "@opentelemetry/exporter-trace-otlp-http": "0.48.0",
@@ -22,13 +25,12 @@
     "@opentelemetry/sdk-trace-node": "1.21.0",
     "@opentelemetry/semantic-conventions": "^1.21.0",
     "@opentelemetry/tracing": "^0.24.0",
+    "@sentry/node": "^7.110.1",
+    "async": "^1.5.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "@grpc/proto-loader": "^0.6.0",
-    "async": "^1.5.2",
     "google-protobuf": "^3.0.0",
-    "@grpc/grpc-js": "^1.8.0",
-    "@grpc/grpc-js-xds": "^1.8.0",
+    "kafka-node": "^5.0.0",
     "lodash": "^4.6.1",
     "minimist": "^1.2.0"
   }
