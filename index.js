@@ -37,9 +37,9 @@ app.all("/grpc", async (req, res) => {
 });
 
 // Kafka
-const client = new kafka.KafkaClient({kafkaHost: 'localhost:9092'});
-const producer = new kafka.Producer(client);
-producer.on('ready', function() {
+const kafkaClient = new kafka.KafkaClient({kafkaHost: 'localhost:9092'});
+const kafkaProducer = new kafka.Producer(kafkaClient);
+kafkaProducer.on('ready', function() {
   console.log('Kafka Producer is connected and ready.');
 });
 
@@ -48,7 +48,7 @@ app.all("/kafka", async (req, res) => {
     { topic: 'booking', messages: 'There is new booking', partition: 0 }
   ];
   
-  producer.send(payloads, function(error, data) {
+  kafkaProducer.send(payloads, function(error, data) {
     if (error) {
       console.error('Error:', error);
     } else {
