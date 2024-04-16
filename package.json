@@ -10,7 +10,7 @@
   "keywords": [
     "backend"
   ],
-  "author": "onxp",
+  "author": "glend",
   "license": "Proprietary",
   "dependencies": {
     "@grpc/grpc-js": "^1.8.0",
