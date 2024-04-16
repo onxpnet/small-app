@@ -26,8 +26,6 @@ app.all("/process", async (req, res) => {
 app.all("/grpc", async (req, res) => {
   try {
     const grpcResp = await grpcClient();
-
-    console.log(grpcResp);
     res.json({
       success: true,
       data: grpcResp

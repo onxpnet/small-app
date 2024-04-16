@@ -13,26 +13,55 @@ var packageDefinition = protoLoader.loadSync(
     });
 var news_proto = grpc.loadPackageDefinition(packageDefinition).news;
 
+// function main() {
+//   var argv = parseArgs(process.argv.slice(2), {
+//     string: 'target'
+//   });
+//   var target;
+//   if (argv.target) {
+//     target = argv.target;
+//   } else {
+//     target = 'localhost:50051';
+//   }
+//   var client = new news_proto.News(target,
+//                                        grpc.credentials.createInsecure());
+//   var title;
+//   if (argv._.length > 0) {
+//     title = argv._[0];
+//   } else {
+//     title = 'Bad News';
+//   }
+//   client.sayNews({title: title}, function(err, response) {
+//     console.log('News:', response.content + ', Priority: ' + response.priority);
+//   });
+// }
+
 function main() {
-  var argv = parseArgs(process.argv.slice(2), {
-    string: 'target'
-  });
-  var target;
-  if (argv.target) {
-    target = argv.target;
-  } else {
-    target = 'localhost:50051';
-  }
-  var client = new news_proto.News(target,
-                                       grpc.credentials.createInsecure());
-  var title;
-  if (argv._.length > 0) {
-    title = argv._[0];
-  } else {
-    title = 'Bad News';
-  }
-  client.sayNews({title: title}, function(err, response) {
-    console.log('News:', response.content + ', Priority: ' + response.priority);
+  return new Promise((resolve, reject) => {
+    var argv = parseArgs(process.argv.slice(2), {
+      string: 'target'
+    });
+    var target;
+    if (argv.target) {
+      target = argv.target;
+    } else {
+      target = 'localhost:50051';
+    }
+    var client = new news_proto.News(target,
+                                         grpc.credentials.createInsecure());
+    var title;
+    if (argv._.length > 0) {
+      title = argv._[0];
+    } else {
+      title = 'Bad News';
+    }
+    client.sayNews({title: title}, function(err, response) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response);
+      }
+    });
   });
 }
 
