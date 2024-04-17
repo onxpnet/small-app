@@ -39,7 +39,7 @@ app.all("/grpc", async (req, res) => {
 });
 
 // Kafka
-const kafkaClient = new kafka.KafkaClient({kafkaHost: 'localhost:9092'});
+const kafkaClient = new kafka.KafkaClient({kafkaHost: process.env.KAFKA_HOST || 'localhost:9092'});
 const kafkaProducer = new kafka.Producer(kafkaClient);
 kafkaProducer.on('ready', function() {
   console.log('Kafka Producer is connected and ready.');
@@ -68,7 +68,7 @@ app.all("/kafka", async (req, res) => {
 const Queue = require('bull');
 
 // Create a Redis queue
-const bullQueue = new Queue('payment', 'redis://127.0.0.1:6379');
+const bullQueue = new Queue('payment', process.env.REDIS_URL || 'redis://127.0.0.1:6379');
 bullQueue.on('error', (error) => {
   console.error('Error in the queue:', error);
 });
