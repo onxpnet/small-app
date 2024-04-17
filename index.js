@@ -62,6 +62,20 @@ app.all("/kafka", async (req, res) => {
   })
 });
 
+// bull
+const Queue = require('bull');
+
+// Create a Redis queue
+const bullQueue = new Queue('payment', 'redis://127.0.0.1:6379');
+
+bullQueue.add({
+  payment: 'There is new payment'
+});
+
+bullQueue.on('error', (error) => {
+  console.error('Error in the queue:', error);
+});
+
 
 const port = process.env.APP_PORT || "3001";
 app.listen(port, function() {
