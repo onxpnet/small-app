@@ -3,6 +3,8 @@ const cors = require('cors')
 const fetch = require('node-fetch');
 const grpcClient = require('./grpc/client');
 const kafka = require('kafka-node');
+const CircuitBreaker = require('opossum');
+const rateLimit = require('express-rate-limit');
 
 require("@opentelemetry/api");
 
@@ -67,13 +69,59 @@ const Queue = require('bull');
 
 // Create a Redis queue
 const bullQueue = new Queue('payment', 'redis://127.0.0.1:6379');
-
-bullQueue.add({
-  payment: 'There is new payment'
-});
-
 bullQueue.on('error', (error) => {
   console.error('Error in the queue:', error);
+});
+
+app.all("/bull", async (req, res) => {
+  bullQueue.add({
+    payment: 'There is new payment'
+  });
+
+  res.json({
+    success: true,
+    data: "Message is queued on bull"
+  });
+});
+
+// circuit breaker
+// function wrapped with circuit breaker
+async function notfoundRequest(payload) {
+  await fetch(process.env.TARGET_URL + "/notfound" || "http://localhost:3002/notfound");
+}
+
+const breaker = new CircuitBreaker(notfoundRequest, {
+  timeout: 3000, // // If our function takes longer than 3 seconds, trigger a failure
+  resetTimeout: 30000, // After 30 seconds, try again.
+  maxFailures: 3 // When we hit 3 failures, trip the circuit
+  // When 50% of requests fail, trip the circuit
+  // errorThresholdPercentage: 50,
+});
+
+// Use the circuit breaker to send a message to Kafka
+app.all("/breaker", async (req, res) => {
+  breaker.fire({
+    checkout: "There is new checkout event"
+  })
+    .then(console.log)
+    .catch(console.error);
+  res.json({
+    success: true,
+    data: "Message is processed"
+  });
+});
+
+// rate limiter
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 mins
+  max: 5 // limit each IP to 5 requests per windowMs
+});
+
+app.all("/limit", limiter, async (req, res) => {
+  res.json({
+    success: true,
+    data: "Message is not limited, yet!"
+  });
 });
 
 
