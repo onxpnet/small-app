@@ -20,7 +20,8 @@ app.all("/process", async (req, res) => {
   try {
     const response = await fetch(process.env.TARGET_URL + "/command" || "http://localhost:3002/command");
     const data = await response.json();
-    console.log(data);
+
+    res.json({ success: true, data: "Success" });
   } catch (error) {
       console.error('Error:', error);
   }
