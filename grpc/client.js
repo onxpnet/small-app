@@ -45,7 +45,7 @@ function main() {
     if (argv.target) {
       target = argv.target;
     } else {
-      target = 'localhost:50051';
+      target = process.env.GRPC_TARGET || 'localhost:50051';
     }
     var client = new news_proto.News(target,
                                          grpc.credentials.createInsecure());
