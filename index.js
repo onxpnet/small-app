@@ -47,7 +47,7 @@ kafkaProducer.on('ready', function() {
 
 app.all("/kafka", async (req, res) => {
   const payloads = [
-    { topic: 'booking', messages: 'There is new booking', partition: 0 }
+    { topic: process.env.KAFKA_TOPIC, messages: 'There is new booking', partition: 0 }
   ];
   
   kafkaProducer.send(payloads, function(error, data) {
@@ -68,7 +68,7 @@ app.all("/kafka", async (req, res) => {
 const Queue = require('bull');
 
 // Create a Redis queue
-const bullQueue = new Queue('payment', process.env.REDIS_URL || 'redis://127.0.0.1:6379');
+const bullQueue = new Queue(process.env.REDIS_TOPIC, process.env.REDIS_URL || 'redis://127.0.0.1:6379');
 bullQueue.on('error', (error) => {
   console.error('Error in the queue:', error);
 });
