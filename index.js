@@ -87,11 +87,12 @@ app.all("/bull", async (req, res) => {
 
 // circuit breaker
 // function wrapped with circuit breaker
-async function notfoundRequest(payload) {
-  await fetch(process.env.TARGET_URL + "/notfound" || "http://localhost:3002/notfound");
+async function errorRequest(payload) {
+  console.log("We can process it!");
+  throw new Error("Error request");
 }
 
-const breaker = new CircuitBreaker(notfoundRequest, {
+const breaker = new CircuitBreaker(errorRequest, {
   timeout: 3000, // // If our function takes longer than 3 seconds, trigger a failure
   resetTimeout: 30000, // After 30 seconds, try again.
   maxFailures: 3 // When we hit 3 failures, trip the circuit
@@ -99,13 +100,18 @@ const breaker = new CircuitBreaker(notfoundRequest, {
   // errorThresholdPercentage: 50,
 });
 
-// Use the circuit breaker to send a message to Kafka
+// Use the circuit breaker 
 app.all("/breaker", async (req, res) => {
   breaker.fire({
     checkout: "There is new checkout event"
   })
     .then(console.log)
     .catch(console.error);
+  
+  breaker.fallback(() => {
+    console.log("fallback");
+  });
+
   res.json({
     success: true,
     data: "Message is processed"
