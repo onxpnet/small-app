@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require('cors')
 const fetch = require('node-fetch');
 const grpcClient = require('./grpc/client');
-const kafka = require('kafka-node');
+// const kafka = require('kafka-node');
 const CircuitBreaker = require('opossum');
 const rateLimit = require('express-rate-limit');
 
@@ -40,30 +40,30 @@ app.all("/grpc", async (req, res) => {
 });
 
 // Kafka
-const kafkaClient = new kafka.KafkaClient({kafkaHost: process.env.KAFKA_HOST || 'localhost:9092'});
-const kafkaProducer = new kafka.Producer(kafkaClient);
-kafkaProducer.on('ready', function() {
-  console.log('Kafka Producer is connected and ready.');
-});
+// const kafkaClient = new kafka.KafkaClient({kafkaHost: process.env.KAFKA_HOST || 'localhost:9092'});
+// const kafkaProducer = new kafka.Producer(kafkaClient);
+// kafkaProducer.on('ready', function() {
+//   console.log('Kafka Producer is connected and ready.');
+// });
 
-app.all("/kafka", async (req, res) => {
-  const payloads = [
-    { topic: process.env.KAFKA_TOPIC, messages: 'There is new booking', partition: 0 }
-  ];
+// app.all("/kafka", async (req, res) => {
+//   const payloads = [
+//     { topic: process.env.KAFKA_TOPIC, messages: 'There is new booking', partition: 0 }
+//   ];
   
-  kafkaProducer.send(payloads, function(error, data) {
-    if (error) {
-      console.error('Error:', error);
-    } else {
-      console.log('Message sent:', data);
-    }
-  });
+//   kafkaProducer.send(payloads, function(error, data) {
+//     if (error) {
+//       console.error('Error:', error);
+//     } else {
+//       console.log('Message sent:', data);
+//     }
+//   });
 
-  res.json({
-    success: true,
-    data: "Message sent to Kafka"
-  })
-});
+//   res.json({
+//     success: true,
+//     data: "Message sent to Kafka"
+//   })
+// });
 
 // bull
 const Queue = require('bull');
